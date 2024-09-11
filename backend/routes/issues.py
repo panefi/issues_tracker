@@ -1,11 +1,7 @@
-import logging
 from fastapi import APIRouter
 from services.issues import srv_get_issues, srv_create_issue, srv_update_issue, srv_delete_issue
 
-
 router = APIRouter()
-
-logging.basicConfig(level=logging.INFO)
 
 
 @router.get("/issues")

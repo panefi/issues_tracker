@@ -1,7 +1,8 @@
 from pydantic import BaseModel
 from typing import Optional
 
-class Issue(BaseModel):
+
+class Issue(BaseModel, extra="forbid"):
     title: str
     description: str
     status: str
