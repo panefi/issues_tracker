@@ -1,0 +1,38 @@
+[
+    {
+        "id": 1,
+        "title": "Network Issue",
+        "description": "Network is down",
+        "status": "open"
+    },
+    {
+        "id": 2,
+        "title": "Server Issue",
+        "description": "Server is down",
+        "status": "closed"
+    },
+    {
+        "id": 3,
+        "title": "Database Issue",
+        "description": "Database is down",
+        "status": "open"
+    },
+    {
+        "title": "Port not working",
+        "description": "The port seems closed",
+        "status": "open",
+        "id": 4
+    },
+    {
+        "title": "Port not working",
+        "description": "The port seems closed",
+        "status": "open",
+        "id": 5
+    },
+    {
+        "title": "Port not working",
+        "description": "The port seems closed",
+        "status": "open",
+        "id": 6
+    }
+]
