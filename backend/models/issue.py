@@ -6,7 +6,7 @@ class Issue(BaseModel, extra="forbid"):
     title: str
     description: str
     status: str
-    id: int
+    id: str
 
 
 class UpdateIssue(BaseModel):

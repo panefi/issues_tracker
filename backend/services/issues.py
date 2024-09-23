@@ -1,6 +1,7 @@
 import json
 import os
 import logging
+import uuid
 from pydantic import ValidationError
 from fastapi import HTTPException
 from models.issue import Issue, UpdateIssue
@@ -26,7 +27,8 @@ def srv_get_issues():
 
 def srv_create_issue(issue):
     issues = srv_get_issues()
-    issue["id"] = len(issues) + 1
+    issue["id"] = str(uuid.uuid4())
+    print(issue)
     try:
         val = Issue(**issue)
     except ValidationError as er:
