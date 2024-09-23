@@ -17,12 +17,12 @@ def create_issue(issue: dict):
 
 
 @router.put("/issue/{issue_id}")
-def update_issue(issue_id: int, body: dict):
+def update_issue(issue_id: str, body: dict):
     updated_issue = srv_update_issue(issue_id, body)
     return updated_issue
 
 
 @router.delete("/issue/{issue_id}")
-def delete_issue(issue_id: int):
+def delete_issue(issue_id: str):
     deleted_issue = srv_delete_issue(issue_id)
     return deleted_issue
