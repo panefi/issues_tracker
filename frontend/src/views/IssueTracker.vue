@@ -1,6 +1,6 @@
 <template>
     <div class="container mt-5">
-      <h1 class="mb-4">Issue Tracker</h1>
+      <h1 class="issue-tracker-title">Issue Tracker</h1> 
       <button class="btn btn-primary mb-3" @click="openCreateModal">Create Issue</button>
       <IssueTable 
         :issues="issues" 
@@ -97,6 +97,29 @@ created() {
 };
 </script>
 
+
+
 <style scoped>
-/* Add your styles here */
+.issue-tracker-title {
+  font-family: 'Poppins', sans-serif; /* Use a modern sans-serif font */
+  font-size: 2.5rem; /* Large font size */
+  font-weight: 700; /* Bold font weight */
+  text-align: center; /* Center the title */
+  background: linear-gradient(135deg, #343A40, #343A40); /* Gradient background */
+  -webkit-background-clip: text; /* Make the gradient apply to text only */
+  -webkit-text-fill-color: transparent; /* Make the text itself transparent */
+  margin-bottom: 1.5rem; /* Space below the title */
+  padding: 10px 20px; /* Padding around the text */
+  border-radius: 8px; /* Slightly rounded corners */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+}
+
+.btn-primary {
+  font-weight: 600; /* Bold text */
+  padding: 10px 20px; /* Padding around the button */
+  border-radius: 5px; /* Rounded corners */
+  background-color: #343A40;
+  margin-left: auto; /* Push the button to the right side */
+}
+
 </style>
