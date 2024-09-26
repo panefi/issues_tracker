@@ -106,7 +106,7 @@ created() {
   font-weight: 700; /* Bold font weight */
   text-align: center; /* Center the title */
   background: linear-gradient(135deg, #343A40, #343A40); /* Gradient background */
-  -webkit-background-clip: text; /* Make the gradient apply to text only */
+  background-clip: text; /* Make the gradient apply to text only */
   -webkit-text-fill-color: transparent; /* Make the text itself transparent */
   margin-bottom: 1.5rem; /* Space below the title */
   padding: 10px 20px; /* Padding around the text */

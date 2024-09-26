@@ -1,38 +1,20 @@
 [
     {
-        "id": 1,
-        "title": "Network Issue",
-        "description": "Network is down",
-        "status": "open"
-    },
-    {
-        "id": 2,
-        "title": "Server Issue",
-        "description": "Server is down",
-        "status": "closed"
-    },
-    {
-        "id": 3,
-        "title": "Database Issue",
-        "description": "Database is down",
-        "status": "open"
-    },
-    {
         "title": "Port not working",
         "description": "The port seems closed",
         "status": "open",
-        "id": 4
+        "id": "9f87c81f-08b9-491c-abfd-e844afdc5b13"
     },
     {
-        "title": "Port not working",
-        "description": "The port seems closed",
+        "title": "API Error",
+        "description": "Server seems down",
         "status": "open",
-        "id": 5
+        "id": "9f87c81f-08b9-491c-abfd-e844afdc5b12"
     },
     {
-        "title": "Port not working",
-        "description": "The port seems closed",
-        "status": "open",
-        "id": 6
+        "title": "User account",
+        "description": "Create an account",
+        "status": "in progress",
+        "id": "9f87c81f-08b9-491c-abfd-e844afdc5b11"
     }
 ]
