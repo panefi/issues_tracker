@@ -12,7 +12,7 @@
       </thead>
       <tbody>
         <tr v-for="issue in issues" :key="issue.id">
-          <td>{{ issue.id }}</td>
+          <td>{{ issue.issue_id }}</td>
           <td>{{ issue.title }}</td>
           <td>{{ issue.description }}</td>
           <td>{{ issue.status }}</td>

@@ -1,24 +1,21 @@
 import json
-import os
 import logging
-import uuid
 from pydantic import ValidationError
 from fastapi import HTTPException
 from models.issue import Issue, UpdateIssue
 from logging_config import setup_logging
+import database.database as database
+import database.queries as db_queries
 
-current_dir = os.path.dirname(os.path.abspath(__file__))
-FILE_PATH = os.path.join(current_dir, "issues_data.json")
 
 setup_logging()
 
 
 def srv_get_issues():
-    # Should change this to connect to the Database
     try:
-        with open(FILE_PATH, "r") as f:
-            issues_data = json.load(f)
-    except json.JSONDecodeError as er:
+        with database.SQLConnection() as db:
+            issues_data = db.execute_query(db_queries.GET_ISSUES_FOR_CUSTOMER_NAME, ("Test Company 1",))
+    except Exception as er:
         logging.error(er)
         issues_data = []
 
@@ -26,9 +23,6 @@ def srv_get_issues():
 
 
 def srv_create_issue(issue):
-    issues = srv_get_issues()
-    issue["id"] = str(uuid.uuid4())
-    print(issue)
     try:
         val = Issue(**issue)
     except ValidationError as er:
@@ -36,54 +30,66 @@ def srv_create_issue(issue):
         raise HTTPException(status_code=400, detail=str(er))
 
     logging.info(f"Creating issue: {val.model_dump()}")
-    # Should change this to connect to the Database
-    issues.append(val.model_dump())
-    with open(FILE_PATH, "w") as f:
-        json.dump(issues, f, indent=4)
+
+    with database.SQLConnection() as db:
+        db.execute_query(
+            db_queries.CREATE_ISSUE,
+            (issue["title"], issue["description"], issue["status"], "Test Company 1")
+        )
 
     return issue
 
 
-def srv_update_issue(issue_id, body):
-    issues = srv_get_issues()
-    for issue in issues:
-        if issue["id"] == issue_id:
-            try:
-                val = UpdateIssue(**body)
-                for key, value in val.model_dump().items():
-                    if value is not None:
-                        issue[key] = value
-            except ValidationError as er:
-                logging.error(er)
-                raise HTTPException(status_code=400, detail=str(er))
-            break
-    else:
-        logging.warning(f"Issue with id {issue_id} not found")
-        raise HTTPException(status_code=404, detail="Issue not found")
+def srv_update_issue(issue_id, issue_data):
+    try:
+        val = UpdateIssue(**issue_data)
+    except ValidationError as er:
+        logging.error(er)
+        raise HTTPException(status_code=400, detail=str(er))
 
-    logging.info(f"Updating issue: {issue}")
+    logging.info(f"Updating issue: {val.model_dump()}")
 
-    # Should change this to connect to the Database
-    with open(FILE_PATH, "w") as f:
-        json.dump(issues, f, indent=4)
+    updates = []
+    params = []
 
-    return issue
+    if "title" in issue_data:
+        updates.append("title=%s")
+        params.append(issue_data["title"])
+    if "description" in issue_data:
+        updates.append("description=%s")
+        params.append(issue_data["description"])
+    if "status" in issue_data:
+        updates.append("status=%s")
+        params.append(issue_data["status"])
+
+    if not updates:
+        raise HTTPException(status_code=400, detail="No fields to update")
+
+    params.append(issue_id)
+    query = db_queries.UPDATE_ISSUE.format(updates=", ".join(updates))
+
+    with database.SQLConnection() as db:
+        db.execute_query(query, params)
+
+    return {"issue_id": issue_id, **issue_data}
 
 
 def srv_delete_issue(issue_id):
-    issues = srv_get_issues()
-    for issue in issues:
-        if issue["id"] == issue_id:
-            issues.remove(issue)
-            break
-    else:
-        logging.error(f"Issue with id {issue_id} not found")
-        raise HTTPException(status_code=404, detail="Issue not found")
-
     logging.info(f"Deleting issue with id {issue_id}")
 
-    # Should change this to connect to the Database
-    with open(FILE_PATH, "w") as f:
-        json.dump(issues, f, indent=4)
+    try:
+        with database.SQLConnection() as db:
+            # Check if the issue exists
+            existing_issue = db.execute_query("SELECT 1 FROM issues WHERE issue_id=%s", (issue_id,))
+            if not existing_issue:
+                logging.error(f"Issue with id {issue_id} not found")
+                raise HTTPException(status_code=404, detail="Issue not found")
+
+            # Delete the issue
+            db.execute_query(db_queries.DELETE_ISSUE, (issue_id,))
+            logging.info(f"Issue with id {issue_id} deleted successfully")
+    except Exception as er:
+        logging.error(f"Database error: {er}")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
 
     return {"message": "Issue deleted"}

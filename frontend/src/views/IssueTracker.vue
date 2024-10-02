@@ -1,6 +1,6 @@
 <template>
     <div class="container mt-5">
-      <h1 class="issue-tracker-title">Issue Tracker</h1> 
+      <h1 class="issue-tracker-title">Issues Tracker</h1> 
       <button class="btn btn-primary mb-3" @click="openCreateModal">Create Issue</button>
       <IssueTable 
         :issues="issues" 
@@ -71,7 +71,7 @@ methods: {
     },
     saveIssue(issue) {
         if (this.isEditing) {
-            axios.put(apiEndpoints.updateIssue(issue.id), issue)
+            axios.put(apiEndpoints.updateIssue(issue.issue_id), issue)
                 .then(() => {
                 this.fetchIssues();
                 this.closeModal();
